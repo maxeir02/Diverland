@@ -95,6 +95,13 @@
             padding: 15px;
             box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
         }
+        .footer-fixed {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+}
         @media (max-width: 900px) {
             .menu-icons { flex-wrap: wrap; gap: 16px; }
             .logo-diverland { margin: 16px 0; }
@@ -136,6 +143,7 @@
         <td>{{ $evento->horario }}</td>
         <td>{{ $evento->lugar }}</td>
         <td>
+            @if(Auth::check() && Auth::user()->email === 'admin@diverland.com')
             <form action="{{ route('eventos.destroy', $evento->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
@@ -143,6 +151,7 @@
                     <i class="fa fa-trash"></i>
                 </button>
             </form>
+            @endif
         </td>
     </tr>
 @empty
@@ -154,6 +163,7 @@
             </table>
         </div>
         <div class="row form-section">
+            @if(Auth::check() && Auth::user()->email === 'admin@diverland.com')
             <div class="col-md-6 mb-3">
                 <div class="card">
                     <div class="card-header bg-warning text-dark fw-bold">
@@ -161,52 +171,52 @@
                     </div>
                     <div class="card-body">
                         <form action="{{ route('eventos.store') }}" method="POST">
-    @csrf
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                            @csrf
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
 
-    <label for="codigo_punto" class="form-label">Punto</label>
-    <select name="codigo_punto" id="codigo_punto" class="form-control mb-2" onchange="actualizarLugar()">
-        <option value="">Seleccione punto</option>
-        <option value="La finca de Rigo">La finca de Rigo</option>
-        <option value="La bendita">La bendita</option>
-        <option value="Evento fuera del parque">Evento fuera del parque</option>
-    </select>
+                            <label for="codigo_punto" class="form-label">Punto</label>
+                            <select name="codigo_punto" id="codigo_punto" class="form-control mb-2" onchange="actualizarLugar()">
+                                <option value="">Seleccione punto</option>
+                                <option value="La finca de Rigo">La finca de Rigo</option>
+                                <option value="La bendita">La bendita</option>
+                                <option value="Evento fuera del parque">Evento fuera del parque</option>
+                            </select>
 
-    <label for="usuario_trabajador" class="form-label">Usuario del Trabajador</label>
-    <input type="text" name="usuario_trabajador" class="form-control mb-2" placeholder="Usuario del Trabajador">
+                            <label for="usuario_trabajador" class="form-label">Nombre del trabajador</label>
+                            <input type="text" name="usuario_trabajador" class="form-control mb-2" placeholder="Nombre del Trabajador">
 
-    <label for="codigo_juego" class="form-label">Juego</label>
-    <select name="codigo_juego" id="codigo_juego" class="form-control mb-2">
-        <option value="">Seleccione juego</option>
-        <option value="inflable">Inflable</option>
-        <option value="trampolin">Trampolín</option>
-        <option value="toro mecanico">Toro Mecánico</option>
-        <option value="piscina de pelotas">Piscina de Pelotas</option>
-    </select>
+                            <label for="codigo_juego" class="form-label">Juego</label>
+                            <select name="codigo_juego" id="codigo_juego" class="form-control mb-2">
+                                <option value="">Seleccione juego</option>
+                                <option value="inflable">Inflable</option>
+                                <option value="trampolin">Trampolín</option>
+                                <option value="toro mecanico">Toro Mecánico</option>
+                                <option value="piscina de pelotas">Piscina de Pelotas</option>
+                            </select>
 
-    <label for="horario" class="form-label">Horario</label>
-    <input type="datetime-local" name="horario" class="form-control mb-3" placeholder="dd/mm/aaaa --:--">
+                            <label for="horario" class="form-label">Horario</label>
+                            <input type="datetime-local" name="horario" class="form-control mb-3" placeholder="dd/mm/aaaa --:--">
 
-    <label for="lugar" class="form-label">Lugar</label>
-    <input type="text" name="lugar" id="lugar" class="form-control mb-3" readonly>
+                            <label for="lugar" class="form-label">Lugar</label>
+                            <input type="text" name="lugar" id="lugar" class="form-control mb-3" readonly>
 
-    <button type="submit" class="btn btn-primary">Programar</button>
-</form>
+                            <button type="submit" class="btn btn-primary">Programar</button>
+                        </form>
 
-<script>
-function actualizarLugar() {
-    const punto = document.getElementById('codigo_punto').value;
-    document.getElementById('lugar').value = punto;
-}
-</script>
+                        <script>
+                        function actualizarLugar() {
+                            const punto = document.getElementById('codigo_punto').value;
+                            document.getElementById('lugar').value = punto;
+                        }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -217,56 +227,57 @@ function actualizarLugar() {
                     </div>
                     <div class="card-body">
                         <form action="{{ route('eventos.actualizar') }}" method="POST">
-    @csrf
-    @method('PUT')
-    <label for="codigo_evento" class="form-label">Numero de evento</label>
-    <select name="codigo_evento" id="codigo_evento" class="form-control mb-2" required>
-        <option value="">Seleccione evento</option>
-        @foreach($eventos as $evento)
-            <option value="{{ $evento->id }}">{{ $evento->usuario_trabajador }}</option>
-        @endforeach
-    </select>
+                            @csrf
+                            @method('PUT')
+                            <label for="codigo_evento" class="form-label">Nombre del Trabajador</label>
+                            <select name="codigo_evento" id="codigo_evento" class="form-control mb-2" required>
+                                <option value="">Seleccione el trabajador</option>
+                                @foreach($eventos as $evento)
+                                    <option value="{{ $evento->id }}">{{ $evento->usuario_trabajador }}</option>
+                                @endforeach
+                            </select>
 
-    <label for="codigo_punto_gestion" class="form-label">Punto</label>
-    <select name="codigo_punto" id="codigo_punto_gestion" class="form-control mb-2" required onchange="actualizarLugarGestion()">
-        <option value="">Seleccione punto</option>
-        <option value="La finca de Rigo">La finca de Rigo</option>
-        <option value="La bendita">La bendita</option>
-        <option value="Evento fuera del parque">Evento fuera del parque</option>
-    </select>
+                            <label for="codigo_punto_gestion" class="form-label">Punto</label>
+                            <select name="codigo_punto" id="codigo_punto_gestion" class="form-control mb-2" required onchange="actualizarLugarGestion()">
+                                <option value="">Seleccione punto</option>
+                                <option value="La finca de Rigo">La finca de Rigo</option>
+                                <option value="La bendita">La bendita</option>
+                                <option value="Evento fuera del parque">Evento fuera del parque</option>
+                            </select>
 
-    <label for="lugar_gestion" class="form-label">Lugar</label>
-    <select name="lugar" id="lugar_gestion" class="form-control mb-2" readonly required>
-        <option value="">Seleccione lugar</option>
-        <option value="La finca de Rigo">La finca de Rigo</option>
-        <option value="La bendita">La bendita</option>
-        <option value="Evento fuera del parque">Evento fuera del parque</option>
-    </select>
+                            <label for="lugar_gestion" class="form-label">Lugar</label>
+                            <select name="lugar" id="lugar_gestion" class="form-control mb-2" readonly required>
+                                <option value="">Seleccione lugar</option>
+                                <option value="La finca de Rigo">La finca de Rigo</option>
+                                <option value="La bendita">La bendita</option>
+                                <option value="Evento fuera del parque">Evento fuera del parque</option>
+                            </select>
 
-    <label for="codigo_juego_gestion" class="form-label">Juego</label>
-    <select name="codigo_juego" id="codigo_juego_gestion" class="form-control mb-2" required>
-        <option value="">Seleccione juego</option>
-        <option value="inflable">Inflable</option>
-        <option value="trampolin">Trampolín</option>
-        <option value="toro mecanico">Toro Mecánico</option>
-        <option value="piscina de pelotas">Piscina de Pelotas</option>
-    </select>
+                            <label for="codigo_juego_gestion" class="form-label">Juego</label>
+                            <select name="codigo_juego" id="codigo_juego_gestion" class="form-control mb-2" required>
+                                <option value="">Seleccione juego</option>
+                                <option value="inflable">Inflable</option>
+                                <option value="trampolin">Trampolín</option>
+                                <option value="toro mecanico">Toro Mecánico</option>
+                                <option value="piscina de pelotas">Piscina de Pelotas</option>
+                            </select>
 
-    <button type="submit" class="btn btn-success">Actualizar</button>
-</form>
+                            <button type="submit" class="btn btn-success">Actualizar</button>
+                        </form>
 
-<script>
-function actualizarLugarGestion() {
-    const punto = document.getElementById('codigo_punto_gestion').value;
-    document.getElementById('lugar_gestion').value = punto;
-}
-</script>
+                        <script>
+                        function actualizarLugarGestion() {
+                            const punto = document.getElementById('codigo_punto_gestion').value;
+                            document.getElementById('lugar_gestion').value = punto;
+                        }
+                        </script>
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
-    <footer>
+    <footer @if(!Auth::check() || Auth::user()->email !== 'admin@diverland.com') class="footer-fixed" @endif>
         © 2025 Diverland - Todos los derechos reservados
     </footer>
 </body>

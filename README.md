@@ -1,4 +1,3 @@
-
 # Sistema de Gestión Diverland
 
 Este proyecto es un sistema de gestión desarrollado en Laravel para la administración de clientes y eventos en Diverland.
@@ -23,8 +22,8 @@ Antes de instalar este sistema, asegúrate de tener instalado en tu equipo:
 
    Abre tu terminal y ejecuta:
    ```bash
-   git clone https://github.com/tu-usuario/tu-repo.git
-   cd tu-repo
+   git clone https://github.com/maxeir02/Diverland.git
+   cd Diverland
    ```
 
 2. **Instala las dependencias de PHP**
@@ -72,6 +71,32 @@ Antes de instalar este sistema, asegúrate de tener instalado en tu equipo:
    ```
 
    El sistema estará disponible en [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+---
+
+## Usuarios de Prueba
+
+A continuación se incluyen usuarios de ejemplo para acceder al sistema:
+
+### Administrador
+
+- **Usuario:** admin@diverland.com
+- **Contraseña:** 12345678
+- **Funciones:**
+  - Acceso total al sistema.
+  - Puede crear, editar y eliminar clientes, inventario y eventos.
+  - Puede gestionar usuarios (crear, eliminar y cambiar contraseñas).
+  - Puede programar y gestionar eventos.
+  - Puede eliminar registros en todas las secciones.
+
+### Usuario Trabajador
+
+- **Usuario:** prueba1@hotmail.com
+- **Contraseña:** 12345678
+- **Funciones:**
+  - Solo puede visualizar la información de clientes, inventario y eventos.
+  - No puede eliminar ni editar registros.
+  - No puede gestionar usuarios ni programar eventos.
 
 ---
 

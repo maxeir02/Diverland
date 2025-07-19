@@ -157,38 +157,67 @@
 
   <div class="container main-content">
     <div class="menu-line">
-      <div class="menu-item">
-        <i class="fas fa-home"></i>
-        <a href="{{ url('/menu') }}">Inicio</a>
-      </div>  
-      <div class="menu-item">
-        <i class="fas fa-users"></i>
-        <a href="{{ url('/clientes/listado') }}">Clientes</a>
-      </div>
+      @if(Auth::check() && Auth::user()->email === 'admin@diverland.com')
+        {{-- Vista SOLO para el admin: 3 a cada lado del logo --}}
+        <div class="menu-item">
+          <i class="fas fa-users"></i>
+          <a href="{{ url('/clientes/listado') }}">Clientes</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-apple-alt"></i>
+          <a href="{{ url('/inventario') }}">Inventario</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-birthday-cake"></i>
+          <a href="{{ url('/eventos') }}">Eventos</a>
+        </div>
 
-      <div class="menu-item">
-        <i class="fas fa-apple-alt"></i>
-        <a href="{{ url('/inventario') }}">Inventario</a>
-      </div>
+        <div class="logo-center-container">
+          <img src="{{ asset('imagenes/logo.png')}}" alt="Logo Centro" class="logo-center">
+        </div>
 
-      <div class="logo-center-container">
-        <img src="{{ asset('imagenes/logo.png')}}" alt="Logo Centro" class="logo-center">
-      </div>
-
-      <div class="menu-item">
-        <i class="fas fa-birthday-cake"></i>
-        <a href="{{ url('/eventos') }}">Eventos</a>
-      </div>
-
-      <div class="menu-item">
-        <i class="fas fa-user-plus"></i>
-        <a href="{{ url('/registroc') }}">Registrar</a>
-      </div>
-
-      <div class="menu-item">
-        <i class="fas fa-sign-out-alt"></i>
-        <a href="{{ url('/login') }}">Salir</a>
-      </div>
+        <div class="menu-item">
+          <i class="fas fa-user-plus"></i>
+          <a href="{{ url('/registroc') }}">Registrar</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-key"></i>
+          <a href="{{ route('admin.cambiar-password') }}">Administrar<br>Usuarios</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <a href="{{ url('/login') }}">Salir</a>
+        </div>
+      @else
+        {{-- Vista para usuarios normales --}}
+        <div class="menu-item">
+          <i class="fas fa-home"></i>
+          <a href="{{ url('/menu') }}">Inicio</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-users"></i>
+          <a href="{{ url('/clientes/listado') }}">Clientes</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-apple-alt"></i>
+          <a href="{{ url('/inventario') }}">Inventario</a>
+        </div>
+        <div class="logo-center-container">
+          <img src="{{ asset('imagenes/logo.png')}}" alt="Logo Centro" class="logo-center">
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-birthday-cake"></i>
+          <a href="{{ url('/eventos') }}">Eventos</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-user-plus"></i>
+          <a href="{{ url('/registroc') }}">Registrar</a>
+        </div>
+        <div class="menu-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <a href="{{ url('/login') }}">Salir</a>
+        </div>
+      @endif
     </div>
 
     <h3 class="text-center mb-4">¡Diverland: Donde la diversión nunca termina!</h3>

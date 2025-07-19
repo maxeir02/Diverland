@@ -117,6 +117,11 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100 mb-2">Iniciar Sesión</button>
+                <div class="text-center">
+                    <a href="{{ route('custom.password.request') }}" class="text-decoration-none" style="color:#ff6f00;">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
             </form>
         </div>
     </div>

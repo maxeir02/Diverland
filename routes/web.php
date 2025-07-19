@@ -7,6 +7,9 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 
 // Ruta para mostrar la página de bienvenida
@@ -96,3 +99,63 @@ Route::delete('/eventos/{id}', [EventoController::class, 'destroy'])->name('even
 // Rutas para registrar nuevos usuarios
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.store');
+
+Route::get('/olvide-mi-contrasena', function () {
+    return view('auth.olvide-contrasena');
+})->name('custom.password.request');
+
+Route::post('/olvide-mi-contrasena', [App\Http\Controllers\Auth\ForgotCustomController::class, 'enviarSolicitud'])->name('custom.password.email');
+
+// Ruta protegida solo para el admin
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/cambiar-password', function () {
+        if (auth()->user()->email !== 'admin@diverland.com') {
+            abort(403, 'No autorizado');
+        }
+        $usuarios = User::all();
+        return view('admin.cambiar-password', compact('usuarios'));
+    })->name('admin.cambiar-password');
+
+    Route::post('/admin/cambiar-password', function (Request $request) {
+        if (auth()->user()->email !== 'admin@diverland.com') {
+            abort(403, 'No autorizado');
+        }
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:6|confirmed'
+        ]);
+        $user = User::where('email', $request->email)->first();
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return back()->with('success', 'Contraseña cambiada correctamente para ' . $user->email);
+    })->name('admin.cambiar-password.post');
+
+    Route::post('/admin/crear-usuario', function (Request $request) {
+        if (auth()->user()->email !== 'admin@diverland.com') {
+            abort(403, 'No autorizado');
+        }
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6'
+        ]);
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+        return back()->with('success', 'Usuario creado correctamente.');
+    })->name('admin.crear-usuario');
+
+    Route::delete('/admin/eliminar-usuario/{id}', function ($id) {
+        if (auth()->user()->email !== 'admin@diverland.com') {
+            abort(403, 'No autorizado');
+        }
+        $user = User::findOrFail($id);
+        if ($user->email === 'admin@diverland.com') {
+            return back()->with('error', 'No puedes eliminar el usuario administrador.');
+        }
+        $user->delete();
+        return back()->with('success', 'Usuario eliminado correctamente.');
+    })->name('admin.eliminar-usuario');
+});

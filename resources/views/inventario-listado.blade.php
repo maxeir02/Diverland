@@ -100,11 +100,13 @@
                         <td>
                             <a href="{{ route('inventario.editar', $producto->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
 
+                            @if(Auth::check() && Auth::user()->email === 'admin@diverland.com')
                             <form action="{{ route('inventario.eliminar', $producto->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de eliminar este producto?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button>
                             </form>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
