@@ -67,6 +67,8 @@
             padding: 32px;
             margin: 0 auto 40px auto;
             max-width: 1100px;
+            min-width: 900px;
+            width: 1000px;   
         }
         .card-eventos h3 {
             color: #1976d2;
@@ -121,44 +123,40 @@
 </header>
     <div class="card-eventos">
         <div class="table-responsive">
-            <table class="table table-bordered mb-4">
+            <table class="table table-bordered mb-4" style="table-layout: fixed; width: 100%;">
                 <thead>
                     <tr>
-                        <th>Numero de evento</th>
-                        <th>Punto</th>
-                        <th>Trabajador</th>
-                        <th>Juego</th>
-                        <th>Horario</th>
-                        <th>Lugar</th>
-                        <th>Acciones</th>
+                        <th style="width: 22%;">Lugar</th>
+                        <th style="width: 22%;">Trabajador</th>
+                        <th style="width: 22%;">Juego</th>
+                        <th style="width: 22%;">Horario</th>
+                        <th style="width: 12%;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-@forelse($eventos as $evento)
-    <tr>
-        <td>{{ $evento->id }}</td>
-        <td>{{ $evento->codigo_punto }}</td>
-        <td>{{ $evento->usuario_trabajador }}</td>
-        <td>{{ $evento->codigo_juego }}</td>
-        <td>{{ $evento->horario }}</td>
-        <td>{{ $evento->lugar }}</td>
-        <td>
-            @if(Auth::check() && Auth::user()->email === 'admin@diverland.com')
-            <form action="{{ route('eventos.destroy', $evento->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este evento?')">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </form>
-            @endif
-        </td>
-    </tr>
-@empty
-    <tr>
-        <td colspan="7" class="text-center">No hay eventos registrados.</td>
-    </tr>
-@endforelse
+                    @forelse($eventos as $evento)
+                    <tr>
+                        <td>{{ $evento->codigo_punto }}</td> <!-- Ahora se llama Lugar -->
+                        <td>{{ $evento->usuario_trabajador }}</td>
+                        <td>{{ $evento->codigo_juego }}</td>
+                        <td>{{ \Carbon\Carbon::parse($evento->horario)->format('Y-m-d') }}</td>
+                        <td>
+                            @if(Auth::check() && Auth::user()->email === 'admin@diverland.com')
+                            <form action="{{ route('eventos.destroy', $evento->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este evento?')">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="text-center">No hay eventos registrados.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -182,9 +180,9 @@
                             </div>
                             @endif
 
-                            <label for="codigo_punto" class="form-label">Punto</label>
+                            <label for="codigo_punto" class="form-label">Lugar</label>
                             <select name="codigo_punto" id="codigo_punto" class="form-control mb-2" onchange="actualizarLugar()">
-                                <option value="">Seleccione punto</option>
+                                <option value="">Seleccione lugar</option>
                                 <option value="La finca de Rigo">La finca de Rigo</option>
                                 <option value="La bendita">La bendita</option>
                                 <option value="Evento fuera del parque">Evento fuera del parque</option>
@@ -203,10 +201,7 @@
                             </select>
 
                             <label for="horario" class="form-label">Horario</label>
-                            <input type="datetime-local" name="horario" class="form-control mb-3" placeholder="dd/mm/aaaa --:--">
-
-                            <label for="lugar" class="form-label">Lugar</label>
-                            <input type="text" name="lugar" id="lugar" class="form-control mb-3" readonly>
+                            <input type="date" name="horario" class="form-control mb-3" placeholder="dd/mm/aaaa">
 
                             <button type="submit" class="btn btn-primary">Programar</button>
                         </form>
@@ -237,17 +232,9 @@
                                 @endforeach
                             </select>
 
-                            <label for="codigo_punto_gestion" class="form-label">Punto</label>
+                            <label for="codigo_punto_gestion" class="form-label">Lugar</label>
                             <select name="codigo_punto" id="codigo_punto_gestion" class="form-control mb-2" required onchange="actualizarLugarGestion()">
-                                <option value="">Seleccione punto</option>
-                                <option value="La finca de Rigo">La finca de Rigo</option>
-                                <option value="La bendita">La bendita</option>
-                                <option value="Evento fuera del parque">Evento fuera del parque</option>
-                            </select>
-
-                            <label for="lugar_gestion" class="form-label">Lugar</label>
-                            <select name="lugar" id="lugar_gestion" class="form-control mb-2" readonly required>
-                                <option value="">Seleccione lugar</option>
+                                <option value="">Seleccione el Lugar</option>
                                 <option value="La finca de Rigo">La finca de Rigo</option>
                                 <option value="La bendita">La bendita</option>
                                 <option value="Evento fuera del parque">Evento fuera del parque</option>

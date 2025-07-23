@@ -9,7 +9,7 @@ class EventoController extends Controller
 {
         // Mostrar vista de eventos
     public function index() {
-        $eventos = Evento::all(); // O tu consulta personalizada
+        $eventos = Evento::all(); // Obtener todos los eventos desde la base de datos
         return view('eventos', compact('eventos'));
     }
 
@@ -48,7 +48,7 @@ class EventoController extends Controller
     $evento = Evento::findOrFail($request->codigo_evento);
 
     $evento->codigo_punto = $request->codigo_punto;
-    $evento->lugar = $request->lugar;
+    $evento->lugar = $request->codigo_punto;
     $evento->codigo_juego = $request->codigo_juego;
     // Si tienes más campos, agrégalos aquí
 
